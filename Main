@@ -1,0 +1,75 @@
+import math
+import copy
+
+
+def Gauss_method(matrix):
+    matrix.sort(reverse=True, key=lambda x: math.fabs(x[0]))
+    number_column = matrix[0].__len__()-1
+    n = 0
+    while n < number_column - 1:
+        number_string = matrix.__len__()-2
+        while number_string >= n:
+            new_str = []
+            for num in range(matrix[number_string].__len__()):
+                new_str.append(matrix[number_string+1][num] -
+                                matrix[number_string][num] * matrix[number_string+1][n] / matrix[number_string][n])
+            matrix[number_string+1] = new_str
+            number_string -= 1
+        n += 1
+    for i in range(matrix.__len__()):
+        new_str = []
+        for j in range(matrix[0].__len__()):
+            new_str.append(matrix[i][j]/matrix[i][i])
+        matrix[i] = new_str
+    print("Метод Гаусса")
+    number_string = matrix.__len__()-1
+    roots = [0] * matrix.__len__()
+    while number_string >= 0:
+        el = matrix[number_string][matrix[number_string].__len__()-1]
+        for i in range(number_string, matrix.__len__()):
+            el = el - matrix[number_string][i]*roots[i]
+        roots[number_string] = el
+        number_string -= 1
+    print(roots)
+
+
+def Gauss_method_of_main_element(matrix):
+    new_matrix = []
+    for str in range(matrix.__len__()):
+        matrix.sort(reverse=True, key=lambda x: math.fabs(x[str]))
+        new_str = []
+        for j in range(matrix[0].__len__()):
+            new_str.append(matrix[0][j]/matrix[0][str])
+        matrix[0] = new_str
+        n = str
+        number_string = matrix.__len__()-2
+        while number_string >= 0:
+                new_str = []
+                for num in range(matrix[number_string].__len__()):
+                    new_str.append(matrix[number_string+1][num] -
+                                    matrix[number_string][num] * matrix[number_string+1][n] / matrix[number_string][n])
+                matrix[number_string+1] = new_str
+                number_string -= 1
+        new_matrix.append(matrix[0])
+        matrix.remove(matrix[0])
+    matrix = new_matrix
+    number_string = matrix.__len__()-1
+    roots = [0] * matrix.__len__()
+    while number_string >= 0:
+        el = matrix[number_string][matrix[number_string].__len__()-1]
+        for i in range(number_string, matrix.__len__()):
+            el = el - matrix[number_string][i]*roots[i]
+        roots[number_string] = el
+        number_string -= 1
+    print("Метод Гаусса с выбором главного элемента")
+    print(roots)
+
+
+def main():
+    matrix = [[-0.15, 1.55, 1.15, 4.70], [0.95, -0.50, 0.10, 1.70], [-0.35, -0.25, -0.50, -2.45]]
+    Gauss_method(copy.deepcopy(matrix))
+    Gauss_method_of_main_element(matrix)
+    ##print(matrix)
+
+if __name__ == '__main__':
+    main()
